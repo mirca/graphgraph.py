@@ -1,0 +1,8 @@
+.DS_Store
+var/
+build/
+graphlearning.egg-info/
+*.so
+__pycache__/
+.coverage
+.eggs/
