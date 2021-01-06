@@ -7,7 +7,7 @@ Citation
 If you made use of this software please consider citing:
 
 -   J. V. de Miranda Cardoso, D. P. Palomar (2021).
-    graphgraph.py: Learning Graphs from Data in Python. Python package version 0.1.0.
+    graphgraph.py: Learning Graphs from Data in Python. Python package version 0.0.1.dev1.
     <https://github.com/mirca/graphgraph.py>
 
 -   S. Kumar, J. Ying, J. V. de Miranda Cardoso, and D. P. Palomar

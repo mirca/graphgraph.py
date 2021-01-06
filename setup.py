@@ -4,7 +4,7 @@ import sys
 import setuptools
 import os
 
-__version__ = '0.0.1dev0'
+__version__ = '0.0.1.dev1'
 
 # Prepare and send a new release to PyPI
 if "release" in sys.argv[-1]:
@@ -31,7 +31,7 @@ class get_pybind_include(object):
 
 ext_modules = [
     Extension(
-        'graphgrah.operators',
+        'graphgraph.operators',
         ['graphgraph/src/operators.cpp'],
         include_dirs=[
             # Path to pybind11 headers
@@ -114,7 +114,7 @@ setup(
     version=__version__,
     author='Ze Vinicius',
     author_email='jvmirca@gmail.com',
-    url='https://github.com/mirca/graphgrah.py',
+    url='https://github.com/mirca/graphgraph.py',
     description='A Python library for graph learning from data',
     long_description='',
     ext_modules=ext_modules,
