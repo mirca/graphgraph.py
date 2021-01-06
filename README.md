@@ -1,6 +1,14 @@
 # graphgraph.py
 Learning Laplacian Markov random fields in Python
 
+Installation
+------------
+
+```
+pip install graphgraph
+```
+
+
 Citation
 --------
 
