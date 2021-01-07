@@ -38,7 +38,8 @@ class LaplacianConstraints:
             c(self)
 
 def test_laplacian_operator():
-    weights = np.random.uniform(size=6)
+    p = random.randint(a = 3, b = 100)
+    weights = np.random.uniform(size=int(.5 * p * (p - 1)))
     LaplacianConstraints(op.laplacian_op(weights)).validate()
 
 @pytest.mark.parametrize("inv_op_name, op_name",
@@ -54,11 +55,8 @@ def test_inverse_operators(inv_op_name, op_name):
                           (op.adj_adjacency_op, op.adjacency_op)])
 def test_adjoint_operators(adj_op_name, op_name):
     "test the inner product equality between the linear operator and its adjoint"
-    # number of nodes
     p = random.randint(a = 3, b = 100)
-    # number of edges
-    m = int(.5 * p * (p - 1))
     X = np.random.uniform(size=p*p).reshape((p, p))
-    weights = np.random.uniform(size=m)
+    weights = np.random.uniform(size=int(.5 * p * (p - 1)))
     np.testing.assert_almost_equal(np.sum(X * op_name(weights)),
                                    np.sum(weights * adj_op_name(X)))
