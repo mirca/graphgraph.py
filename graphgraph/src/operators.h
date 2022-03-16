@@ -59,7 +59,7 @@ matrix_t adjacency_op(c_vector_t& weights) {
 / param: in_matrix input matrix
 / return: out_vector output vector
 */
-vector_t adj_laplacian_op(c_matrix_t& in_matrix) {
+vector_t laplacian_op_T(c_matrix_t& in_matrix) {
   int ncols = in_matrix.cols();
   int k = .5 * ncols * (ncols - 1);
   int j = 0;
@@ -83,7 +83,7 @@ vector_t adj_laplacian_op(c_matrix_t& in_matrix) {
   param: in_matrix input matrix
   return: out_vector output vector
 */
-vector_t adj_adjacency_op(c_matrix_t& in_matrix) {
+vector_t adjacency_op_T(c_matrix_t& in_matrix) {
   int ncols = in_matrix.cols();
   int k = .5 * ncols * (ncols - 1);
   int j = 0;
@@ -147,7 +147,7 @@ vector_t degree_op(c_vector_t& weights) {
 / param: in_vector input vector
 / return: out_vector adjoint of the degree operator
 */
-vector_t adj_degree_op(c_vector_t in_vector) {
-  return adj_laplacian_op(in_vector.asDiagonal());
+vector_t degree_op_T(c_vector_t in_vector) {
+  return laplacian_op_T(in_vector.asDiagonal());
 }
 #endif

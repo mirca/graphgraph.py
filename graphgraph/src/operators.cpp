@@ -63,7 +63,7 @@ PYBIND11_MODULE(operators, m) {
          )pbdoc"
         );
 
-  m.def("adj_laplacian_op", &adj_laplacian_op,
+  m.def("laplacian_op_T", &laplacian_op_T,
         py::arg("in_matrix"),
         R"pbdoc(
           Computes the adjoint of the Laplacian operator.
@@ -73,7 +73,7 @@ PYBIND11_MODULE(operators, m) {
          )pbdoc"
         );
 
-  m.def("adj_adjacency_op", &adj_adjacency_op,
+  m.def("adjacency_op_T", &adjacency_op_T,
         py::arg("in_matrix"),
         R"pbdoc(
           Computes the adjoint of the adjacency operator.
@@ -83,7 +83,7 @@ PYBIND11_MODULE(operators, m) {
          )pbdoc"
         );
 
-  m.def("adj_degree_op", &adj_degree_op,
+  m.def("degree_op_T", &degree_op_T,
         py::arg("weights"),
         R"pbdoc(
           Computes the adjoint of the degree operator.

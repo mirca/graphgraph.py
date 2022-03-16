@@ -63,14 +63,14 @@ def test_inverse_operators(inv_op_name, op_name):
 
 
 @pytest.mark.parametrize(
-    "adj_op_name, op_name",
-    [(op.adj_laplacian_op, op.laplacian_op), (op.adj_adjacency_op, op.adjacency_op)],
+    "op_name_T, op_name",
+    [(op.laplacian_op_T, op.laplacian_op), (op.adjacency_op_T, op.adjacency_op)],
 )
-def test_adjoint_operators(adj_op_name, op_name):
+def test_adjoint_operators(op_name_T, op_name):
     "test the inner product equality between the linear operator and its adjoint"
     p = random.randint(a=3, b=100)
     X = np.random.uniform(size=p * p).reshape((p, p))
     weights = np.random.uniform(size=int(0.5 * p * (p - 1)))
     np.testing.assert_almost_equal(
-        np.sum(X * op_name(weights)), np.sum(weights * adj_op_name(X))
+        np.sum(X * op_name(weights)), np.sum(weights * op_name_T(X))
     )
