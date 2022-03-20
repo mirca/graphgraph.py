@@ -19,6 +19,17 @@ PYBIND11_MODULE(operators, m) {
          )pbdoc"
         );
 
+  m.def("normalized_laplacian_op", &normalized_laplacian_op,
+        py::arg("weights"),
+        R"pbdoc(
+          Computes the Normalized Laplacian operator which maps a vector of weights into
+          a valid Laplacian matrix.
+
+          param: weights vector of graph weights
+          return: Normalized Laplacian matrix
+         )pbdoc"
+        );
+
   m.def("inv_laplacian_op", &inv_laplacian_op,
         py::arg("laplacian_matrix"),
         R"pbdoc(

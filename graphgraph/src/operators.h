@@ -150,4 +150,16 @@ vector_t degree_op(c_vector_t& weights) {
 vector_t degree_op_T(c_vector_t in_vector) {
   return laplacian_op_T(in_vector.asDiagonal());
 }
+
+
+matrix_t normalized_laplacian_op(c_vector_t& weights) {
+  matrix_t Aw = adjacency_op(weights);
+  vector_t dw = degree_op(weights);
+  vector_t invsqrt_dw = (1.0 / dw.array().sqrt()).matrix();
+  matrix_t Tmp = Aw.array().colwise() * invsqrt_dw.array();
+  Tmp = Tmp.array().rowwise() * invsqrt_dw.transpose().array();
+  Tmp.diagonal().array() -= 1.0;
+  return (0.0 - Tmp.array()).matrix();
+}
+
 #endif
