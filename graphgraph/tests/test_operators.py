@@ -51,6 +51,14 @@ def test_laplacian_operator():
     weights = np.random.uniform(size=int(0.5 * p * (p - 1)))
     LaplacianConstraints(op.laplacian_op(weights)).validate()
 
+def test_normalized_laplacian_operator():
+    p = random.randint(a=3, b=100)
+    weights = np.random.uniform(size=int(0.5 * p * (p - 1)))
+    L_normalized = op.normalized_laplacian_op(weights)
+    L = op.laplacian_op(weights)
+    D_ = np.diag(1/np.sqrt(np.diagonal(L)))
+    np.testing.assert_array_almost_equal(L_normalized, D_ @ L @ D_)
+
 
 @pytest.mark.parametrize(
     "inv_op_name, op_name",
@@ -73,4 +81,12 @@ def test_adjoint_operators(op_name_T, op_name):
     weights = np.random.uniform(size=int(0.5 * p * (p - 1)))
     np.testing.assert_almost_equal(
         np.sum(X * op_name(weights)), np.sum(weights * op_name_T(X))
+    )
+
+def test_degree_adjoint_operator():
+    p = random.randint(a=3, b=100)
+    x = np.random.uniform(size=p)
+    weights = np.random.uniform(size=int(0.5 * p * (p - 1)))
+    np.testing.assert_almost_equal(
+            np.sum(x * op.degree_op(weights)), np.sum(weights * op.degree_op_T(x))
     )
