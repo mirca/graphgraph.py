@@ -3,6 +3,7 @@ import numpy as np
 import inspect
 import random
 from graphgraph import operators as op
+from graphgraph import operators_py as op_py
 
 
 class LaplacianConstraintError(RuntimeError):
@@ -91,4 +92,14 @@ def test_degree_adjoint_operator():
     weights = np.random.uniform(size=int(0.5 * p * (p - 1)))
     np.testing.assert_almost_equal(
         np.sum(x * op.degree_op(weights)), np.sum(weights * op.degree_op_T(x))
+    )
+
+
+def test_degree_mat_adjoint_operator():
+    p = random.randint(a=3, b=100)
+    degree_mat = op_py.degree_op_mat(p)
+    x = np.random.uniform(size=p)
+    weights = np.random.uniform(size=int(0.5 * p * (p - 1)))
+    np.testing.assert_almost_equal(
+        np.sum(x * degree_mat @ (weights.T)), np.sum(weights * op.degree_op_T(x))
     )
