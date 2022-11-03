@@ -15,7 +15,7 @@ class NormalizedLaplacian(object):
         samples,
         scale_input=True,
         k=1,
-        rho=1,
+        rho=1e2,
         mu=1,
         tau=1,
         eta=0,
@@ -93,11 +93,11 @@ class NormalizedLaplacian(object):
             elif s > self.mu * r:
                 self.rho /= self.tau
             # update eta
-            # n_zero_eigenvalues = np.sum(np.linalg.eigvalsh(laplacian_op(w)) < 1e-9)
-            # if self.k < n_zero_eigenvalues:
-            #    self.eta *= 0.5
-            # elif self.k > n_zero_eigenvalues:
-            #    self.eta *= 2.0
+            n_zero_eigenvalues = np.sum(np.linalg.eigvalsh(laplacian_op(w)) < 1e-9)
+            if self.k < n_zero_eigenvalues:
+                self.eta *= 0.5
+            elif self.k > n_zero_eigenvalues:
+                self.eta *= 2.0
             # else:
             #    break
             # check convergence
@@ -168,43 +168,42 @@ class SubproblemGraphWeights(object):
         diag_Psi = np.diagonal(self.Psi)
         Aw = adjacency_op(w)
         dw = degree_op(w)
-        term1 = 2.0 * adjacency_op_T(
+        term1 = self.rho * adjacency_op_T(
             self.Psi @ self.Psi @ Aw @ self.Psi @ self.Psi
             + self.Psi @ (self.Theta - self.I) @ self.Psi
         )
-        term2 = 2.0 * degree_op_T(dw - 1 / (diag_Psi * diag_Psi))
+        term2 = self.rho * degree_op_T(dw - 1 / (diag_Psi * diag_Psi))
         term3 = adjacency_op_T(self.Psi @ (self.Y - self.S) @ self.Psi)
         term4 = -degree_op_T(self.z)
         term5 = self.eta * laplacian_op_T(self.V @ self.V.T)
         return term1 + term2 + term3 + term4 + term5
 
     def optimize(self):
-        # obj0 = self.get_objective_function(self.w)
+        obj0 = self.get_objective_function(self.w)
         for i in range(self.maxiter):
-            # w_copy = np.copy(self.w)
+            w_copy = np.copy(self.w)
             delta_w = self.get_gradient(self.w)
             self.w = np.maximum(self.w - self.lr * delta_w, 0)
-            # print(obj0 - self.get_objective_function(self.w))
-            # while True:
-            #    w_update = np.maximum(self.w - lr * delta_w, 0)
-            #    if (
-            #        np.abs(w_update - self.w) <= 0.5 * 1e-4 * (w_update + self.w)
-            #    ).all():
-            #        break
-            #    obj_update = self.get_objective_function(w_update)
-            #    if obj_update < (
-            #        obj0
-            #        + np.sum(delta_w * (w_update - self.w))
-            #        + 0.5 * (1.0 / lr) * np.linalg.norm(w_update - self.w) ** 2.0
-            #    ):
-            #        self.w = w_update
-            #        lr = 2.0 * lr
-            #        obj0 = obj_update
-            #        break
-            #    else:
-            #        lr = 0.5 * lr
-            # if (np.abs(w_copy - self.w) <= 0.5 * 1e-4 * (w_copy + self.w)).all():
-            #    break
+            while True:
+                w_update = np.maximum(self.w - self.lr * delta_w, 0)
+                if (
+                    np.abs(w_update - self.w) <= 0.5 * 1e-4 * (w_update + self.w)
+                ).all():
+                    break
+                obj_update = self.get_objective_function(w_update)
+                if obj_update < (
+                    obj0
+                    + np.sum(delta_w * (w_update - self.w))
+                    + 0.5 * (1.0 / self.lr) * np.linalg.norm(w_update - self.w) ** 2.0
+                ):
+                    self.w = w_update
+                    self.lr = 2.0 * self.lr
+                    obj0 = obj_update
+                    break
+                else:
+                    self.lr = 0.5 * self.lr
+            if (np.abs(w_copy - self.w) <= 0.5 * 1e-4 * (w_copy + self.w)).all():
+                break
         return self.w
 
 
