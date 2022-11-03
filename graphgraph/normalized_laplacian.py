@@ -93,13 +93,13 @@ class NormalizedLaplacian(object):
             elif s > self.mu * r:
                 self.rho /= self.tau
             # update eta
-            n_zero_eigenvalues = np.sum(np.linalg.eigvalsh(laplacian_op(w)) < 1e-9)
-            if self.k < n_zero_eigenvalues:
-                self.eta *= 0.5
-            elif self.k > n_zero_eigenvalues:
-                self.eta *= 2.0
-            else:
-                break
+            # n_zero_eigenvalues = np.sum(np.linalg.eigvalsh(laplacian_op(w)) < 1e-9)
+            # if self.k < n_zero_eigenvalues:
+            #    self.eta *= 0.5
+            # elif self.k > n_zero_eigenvalues:
+            #    self.eta *= 2.0
+            # else:
+            #    break
             # check convergence
             has_converged = (s < self.tol) and (r < self.tol) and (i > 1)
             if has_converged:
