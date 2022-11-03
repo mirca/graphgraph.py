@@ -101,5 +101,5 @@ def test_degree_mat_adjoint_operator():
     x = np.random.uniform(size=p)
     weights = np.random.uniform(size=int(0.5 * p * (p - 1)))
     np.testing.assert_almost_equal(
-        np.sum(x * degree_mat @ (weights.T)), np.sum(weights * op.degree_op_T(x))
+        np.sum(x * (degree_mat @ weights.T)), np.sum(weights * op.degree_op_T(x))
     )
