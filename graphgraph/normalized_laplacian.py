@@ -183,7 +183,6 @@ class SubproblemGraphWeights(object):
         for i in range(self.maxiter):
             w_copy = np.copy(self.w)
             delta_w = self.get_gradient(self.w)
-            self.w = np.maximum(self.w - self.lr * delta_w, 0)
             while True:
                 w_update = np.maximum(self.w - self.lr * delta_w, 0)
                 if (
@@ -264,8 +263,8 @@ class SubproblemPsi(object):
         self.dw = degree_op(w)
         self.p = np.shape(self.Theta)[0]
         self.I = np.eye(self.p)
+        self.lr = 1e-4
         self.maxiter = maxiter
-        self.lr = 1.0
 
     def get_objective_function(self, Psi) -> float:
         diag_Psi = np.diagonal(Psi)
@@ -297,9 +296,9 @@ class SubproblemPsi(object):
         #    while True:
         #        Psi_update = np.diag(np.diagonal(self.Psi - self.lr * delta_Psi))
         #        if (
-        #            np.linalg.norm(Psi_update - self.Psi) / np.linalg.norm(self.Psi)
-        #            < 1e-4
-        #        ):
+        #            np.abs(Psi_update - self.Psi)
+        #            <= 0.5 * 1e-4 * (Psi_update + self.Psi)
+        #        ).all():
         #            break
         #        obj_update = self.get_objective_function(Psi_update)
         #        if obj_update < (
@@ -318,4 +317,4 @@ class SubproblemPsi(object):
         #            self.lr = 0.5 * self.lr
         #    if np.linalg.norm(Psi_copy - self.Psi) / np.linalg.norm(Psi_copy) < 1e-4:
         #        break
-        # return Psi_update
+        # return self.Psi
